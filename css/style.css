@@ -1,0 +1,72 @@
+* {
+    font-family: "Britannic Bold", sans-serif;
+    color: darkcyan;
+}
+
+*:hover {
+    color: cornflowerblue;
+}
+
+.todo-hidden{
+    display: none;
+}
+
+body {
+    max-width: 1370px;
+    margin: 0px 10px auto ;
+    padding-top: 20px;
+}
+
+.row {
+    width: 100%;
+}
+
+.colored-region {
+    background-color: rgba(173, 216, 230, 0.65);
+}
+
+.align-center {
+    text-align: center;
+}
+
+.btn {
+
+}
+
+.btn-inline {
+
+}
+
+.display-inline{
+    display: inline;
+}
+
+.border-box{
+    border: 2px solid gray;
+}
+
+.box-shadow {
+    box-shadow: 5px 2px 5px 2px #888888;
+}
+
+.position-relative {
+    position: relative;
+}
+
+.position-top-right {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+
+.todo-item {
+    list-style: none;
+}
+
+.todo-item:hover {
+    background-color: cornsilk;
+}
+
+.line-through {
+    text-line-through-color: red;
+}
