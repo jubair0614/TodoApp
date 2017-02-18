@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Todo Application</title>
+
+    <link type="text/css" rel="stylesheet" href="../css/commonCSS.css">
+    <link type="text/css" rel="stylesheet" href="../css/style.css">
+    <link type="text/css" rel="stylesheet" href="../resources/font-awesome-4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+    <h1 class="align-center">ToDo List Website</h1>
+
+    <section>
+        <hr>
+
+        <div class="row">
+            <button id="btn_generate_todo_div" class="p-l-10px p-r-10px p-t-5px p-b-5px" onclick="controller.generateTodoAddDiv()"><i class="fa fa-plus" aria-hidden="true">Add Todo</i></button>
+            <div class=" float-right">
+                <input type="search" placeholder="Search..." id="search_input" class="display-inline p-5px" onkeypress="controller.search()" onkeydown="controller.search()"/>
+                <i class="fa fa-search p-5px" aria-hidden="true"></i>
+            </div>
+        </div>
+
+        <div id="todo-form"  class="todo-hidden border-box m-t-10px m-b-10px p-l-30px p-t-10px p-b-10px">
+            <form id="input-form" action="javascript:controller.saveTaskButtonClickEvent()">
+                <label>Title:</label> <br>
+                <input type="text" name="title" id="todo-title" class="m-b-10px" required> <br>
+                <label>Description:</label> <br>
+                <textarea type="text" name="description" id="todo-description" class="m-b-10px" required></textarea> <br>
+                <input type="submit" value="Submit"> <br>
+            </form>
+        </div>
+
+        <hr>
+
+        <div>
+            <form>
+                <input type="radio" name="status" value="All" id="all"  onclick="controller.allTodoView()" checked>All
+                <input type="radio" name="status" value="Done" id="done" onclick="controller.doneTodoView()">Done
+                <input type="radio" name="status" value="Pending" id="pending" onclick="controller.pendingTodoView()">Pending
+            </form>
+        </div>
+
+        <hr>
+
+        <div id="todos-view">
+
+        </div>
+    </section>
+
+    <script type="text/javascript" src="../javascript/controller.js" ></script>
+    <script type="javascript" src="../javascript/model.js"></script>
+    <script type="javascript" src="../javascript/view.js"></script>
+</body>
+</html>
