@@ -9,8 +9,7 @@
 (function (window){
 
     function Model() {
-        var idCounter = 1;
-        this.Todo = function Todo(title, description, status) {
+        function Todo(title, description, status) {
             this.id = id;
             this.title = title;
             this.description = description;
@@ -49,7 +48,8 @@
             }
         }
 
-        this.Repository = function Repository() {
+        function Repository() {
+            var idCounter = 0;
             this.initiate = function initiate() {
                 var repository = [];
 
@@ -57,6 +57,8 @@
             }
 
             this.addTodo = function addTodo(singleTodo){
+                singleTodo.id = idCounter+1;
+                idCounter++;
                 var allTodo = getLocalStorageAllTodo();
                 allTodo.push(singleTodo);
                 setLocalStorageAllTodo(allTodo);
@@ -99,31 +101,28 @@
 
 
             function getLocalStorageAllTodo() {
-                return localStorage.getItem(JSON.parse('todoList'));
+                var data = JSON.parse(localStorage.getItem('todoList'));
+                if(data == null) return [];
+                else return data;
+            }
+
+            function setMaxId(){
+                var allData = getLocalStorageAllTodo();
+                allData.forEach(function (item){
+                    if(item.id > idCounter) idCounter = item.id;
+                })
             }
 
             function setLocalStorageAllTodo(todoList) {
-                localStorage.setItem('todoList', JSON.stringify('todoList'));
+                localStorage.setItem('todoList', JSON.stringify(todoList));
             }
 
-            function sortTodos(allTodo){
+            this.sortAllTodo = function sortAllTodo(){
+                var allTodo = getLocalStorageAllTodo();
                 allTodo.sort(function (firstTodo, secondTodo){
                     return firstTodo.title.localeCompare(secondTodo.title);
                 })
                 return allTodo;
-            }
-
-            function markItem(id){
-                var data = getLocalStorageData();
-                data = JSON.parse(data);
-                console.log("mark item id: " + id);
-                data.forEach(function (item){
-                    if(item.id == id) {
-                        if(item.status == "pending") item.status = "done";
-                        else item.status = "pending";
-                    }
-                })
-                localStorage.setItem('todoList', JSON.stringify(data));
             }
 
             function deleteItem(id){
@@ -142,27 +141,55 @@
                 viewTodo();
             }
 
-            function search(){
-                var search_item = document.getElementById('search_input').value;
-
-                var todoList = JSON.parse(localStorage.getItem('todoList'));
+            this.searchText = function search(content){
                 var matchingTodos = [];
+                var todoList = getLocalStorageAllTodo();
                 for(var i=0; i<todoList.length; i++){
                     var title = todoList[i].title;
                     var description = todoList[i].description;
 
-                    console.log(typeof (title) + " " + typeof (description));
-                    if(title.search(search_item) >= 0 || description.search(search_item) >= 0){
+                    if(title.search(content) >= 0 || description.search(content) >= 0){
                         matchingTodos.push(todoList[i]);
                     }
                 }
-                viewTodos(matchingTodos);
+
+                return matchingTodos;
             }
+
+            this.changeStatus = function (id){
+                var allTodo = getLocalStorageAllTodo();
+                allTodo.forEach(function (item) {
+                    if(item.id == id){
+                        if(currentTodo.status == 'pending') currentTodo.status = 'done';
+                        else currentTodo.status = 'pending';
+                    }
+                })
+                setLocalStorageAllTodo(allTodo);
+            }
+
+            this.filterTodos = function(state, matchedTodos){
+                var expectedTodos = [];
+                if(state == 'all'){
+                    return matchedTodos;
+                }
+                else {
+                    matchedTodos.forEach(function (item){
+                        if(item.status == state){
+                            expectedTodos.push(item);
+                        }
+                    })
+                    return expectedTodos;
+                }
+            }
+
+            setMaxId();
 
         }
 
-    }
+        this.repository = new Repository();
+        this.Todo = Todo;
 
+    }
     window.model = new Model();
 
 })(window);

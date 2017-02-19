@@ -15,9 +15,9 @@
         <hr>
 
         <div class="row">
-            <button id="btn_generate_todo_div" class="p-l-10px p-r-10px p-t-5px p-b-5px" onclick="controller.generateTodoAddDiv()"><i class="fa fa-plus" aria-hidden="true">Add Todo</i></button>
+            <button id="btn_generate_todo_div" class="p-l-10px p-r-10px p-t-5px p-b-5px" onclick="controller.addButtonClickEvent()"><i class="fa fa-plus" aria-hidden="true">Add Todo</i></button>
             <div class=" float-right">
-                <input type="search" placeholder="Search..." id="search_input" class="display-inline p-5px" onkeypress="controller.search()" onkeydown="controller.search()"/>
+                <input type="search" placeholder="Search..." id="search_input" class="display-inline p-5px" oninput="controller.searchButtonClickEvent()"/>
                 <i class="fa fa-search p-5px" aria-hidden="true"></i>
             </div>
         </div>
@@ -36,9 +36,9 @@
 
         <div>
             <form>
-                <input type="radio" name="status" value="All" id="all"  onclick="controller.allTodoView()" checked>All
-                <input type="radio" name="status" value="Done" id="done" onclick="controller.doneTodoView()">Done
-                <input type="radio" name="status" value="Pending" id="pending" onclick="controller.pendingTodoView()">Pending
+                <input type="radio" name="status" value="all" id="all"  onclick="controller.optionClickListener()" checked>All
+                <input type="radio" name="status" value="done" id="done" onclick="controller.optionClickListener()">Done
+                <input type="radio" name="status" value="pending" id="pending" onclick="controller.optionClickListener()">Pending
             </form>
         </div>
 
@@ -48,9 +48,8 @@
 
         </div>
     </section>
-
+    <script type="text/javascript" src="../javascript/model.js"></script>
+    <script type="text/javascript" src="../javascript/view.js"></script>
     <script type="text/javascript" src="../javascript/controller.js" ></script>
-    <script type="javascript" src="../javascript/model.js"></script>
-    <script type="javascript" src="../javascript/view.js"></script>
 </body>
 </html>

@@ -4,36 +4,59 @@
 
 
 (function (window) {
-    
+    'use strict';
     function Controller() {
-        this.generateTodoAddDiv = function generateTodoAddDiv(){
-            var addTodoDiv = todoForm;
-            addTodoDiv.classList.remove('todo-hidden');
-            return addTodoDiv;
+        this.addButtonClickEvent = function(){
+            view.viewDivToAddTodo();
         }
 
-        this.allTodoView = function allTodoView() {
+        this.saveTaskButtonClickEvent = function(){
+            var todo = view.getInputData();
+            todo.status = 'pending';
+            model.repository.addTodo(todo);
+            view.hideDivToAddTodo();
+
+            refreshView();
+        }
+
+        this.searchButtonClickEvent = function search() {
+            var content = view.searchContent();
+            var state = view.getState();
+            var matchedTodos = model.repository.searchText(content);
+            console.log(matchedTodos);
+            var expectedTodos = model.repository.filterTodos(state, matchedTodos);
+            filteredView(expectedTodos);
+        }
+
+        this.optionClickListener = function (){
+            this.searchButtonClickEvent();
+        }
+
+        this.editOptionClickListener = function (){
 
         }
 
-        this.doneTodoView = function allTodoView() {
+        this.deleteOptionClickListener = function (){
 
         }
 
-        this.pendingTodoView = function allTodoView() {
+        /*this.checkedOptionClickListener = function (id){
+            var checked = model.repository.changeStatus(id);
+            var checkedTodo = model.repository.getSingleTodo(id);
+            view.viewChangedState(checkedTodo);
+            refreshView();
+        }*/
 
+        function filteredView(expectedTodos){
+            view.allTodoView(expectedTodos);
         }
 
-        this.search = function search() {
-
+        function refreshView(){
+            var todoList = model.repository.sortAllTodo();
+            view.allTodoView(todoList);
         }
-
-        this.listener = function listerner() {
-            todoForm = document.getElementById('todo-form');
-        }
+        refreshView();
     }
 
     window.controller = new Controller();
-
-    controller.listener();
 })(window);
