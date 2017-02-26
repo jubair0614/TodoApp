@@ -156,7 +156,7 @@
                 return matchingTodos;
             }
 
-            this.changeStatus = function (id){
+            this.updateStatus = function (id){
                 var allTodo = getLocalStorageAllTodo();
                 allTodo.forEach(function (item) {
                     if(item.id == id){

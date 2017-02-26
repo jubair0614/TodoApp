@@ -70,3 +70,8 @@ body {
 .line-through {
     text-line-through-color: red;
 }
+
+.done-todo {
+    background-color: darkslateblue;
+    color: crimson;
+}

@@ -41,20 +41,19 @@
             }
         }
 
-        /*this.viewChangedState = function (checkedTodo){
-            var todoDom = todoToDomEelement(checkedTodo);
-            var title = todoDom.getElementsByTagName('h4');
-            title.style.textDecoration = 'line-through';
-            var description = todoDom.getElementsByTagName('p');
-            description.style.textDecoration = 'line-through';
-            return todoDom;
-        }*/
+        this.getTodoStatusId = function(){
+            return document.getEle
+        }
 
         function createCheckBox(id){
             var checkBox = document.createElement('input');
             checkBox.type = 'checkbox';
             checkBox.classList.add('m-r-5px');
-            //checkBox.onclick(controller.checkedOptionClickListener(id));
+            checkBox.classList.add('checkbox');
+            checkBox.id = id;
+            //checkBox.onclick = function() { alert(this.id); };
+            console.log(checkBox.id);
+
             return checkBox;
         }
         function createEditButton(id){
@@ -67,6 +66,8 @@
             fontEdit.setAttribute('aria-hidden', true);
 
             editButton.appendChild(fontEdit);
+            editButton.id = id;
+            console.log(editButton.id);
             return editButton;
         }
 
@@ -80,8 +81,11 @@
             fontDelete.setAttribute('aria-hidden', true);
 
             deleteButton.appendChild(fontDelete);
+            deleteButton.id = id;
+            console.log(deleteButton.id);
             return deleteButton;
         }
+
         function createDivButtons(id){
             var divButtons = document.createElement('div');
             divButtons.classList.add('position-top-right');
@@ -90,10 +94,29 @@
             divButtons.appendChild(createCheckBox(id));
             divButtons.appendChild(createEditButton(id));
             divButtons.appendChild(createDeleteButton(id));
+
             return divButtons;
         }
 
-        function todoToDomEelement(todo){
+        function createSaveButton(id){
+            var saveButton = document.createElement('button');
+            saveButton.classList.add('m-r-5px');
+            saveButton.innerHTML = 'Save';
+            saveButton.id = id;
+
+            return saveButton;
+        }
+
+        function createCancelButton(id){
+            var cancelButton = document.createElement('button');
+            cancelButton.classList.add('m-r-5px');
+            cancelButton.innerHTML = 'Cancel';
+            cancelButton.id = id;
+
+            return cancelButton;
+        }
+
+        function todoToDomElement(todo){
             var todoDiv = document.createElement('div');
             todoDiv.classList.add('todo-item');
             todoDiv.classList.add('p-10px');
@@ -114,29 +137,43 @@
 
             return todoDiv;
         }
+
+        function updatedTodoView(todo){
+            var todoDiv = document.createElement('div');
+            todoDiv.classList.add('todo-item');
+            todoDiv.classList.add('p-10px');
+            todoDiv.classList.add('box-shadow');
+            todoDiv.classList.add('m-b-15px');
+            todoDiv.classList.add('position-relative');
+
+            var titleText = document.createElement('h4');
+            titleText.innerText = todo.title;
+
+            var descriptionText = document.createElement('p');
+            descriptionText.innerText = todo.description;
+
+            todoDiv.appendChild(titleText);
+            todoDiv.appendChild(descriptionText);
+            todoDiv.appendChild(createSaveButton(todo.id));
+            todoDiv.appendChild(createCancelButton(todo.id));
+
+            return todoDiv;
+        }
+
+        function updateTodo(todo){
+            return updatedTodoView(todo);
+        }
+
         this.allTodoView = function(allTodo) {
             var listContainer = document.getElementById('todos-view');
             listContainer.innerHTML = '';
 
             for (var i= 0; i<allTodo.length; i++){
-                var domElement = todoToDomEelement(allTodo[i]);
+                var domElement = todoToDomElement(allTodo[i]);
                 listContainer.appendChild(domElement);
             }
         }
     }
     window.view = new View();
 })(window);
-/*
 
-
-'<div class="todo-item p-10px box-shadow m-b-15px position-relative">' +
-'<div class="position-top-right item_option">' +
-'<input type="checkbox" id="' + temp + '"class="m-r-5px" onclick="markItem(' + data[i].id + ')">' + '</input>' +
-'<button id="' + temp1 + '"class="m-r-5px" onclick="editItem(' + data[i].id + ')"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>' +
-'<button id="' + temp2 + '"class="m-r-5px" onclick="deleteItem(' + data[i].id + ')"><i class="fa fa-trash-o" aria-hidden="true"></i></button>' +
-'</div>' +
-'<h4>' + data[i].title + '</h4>' +
-'<p>' + data[i].description + '</p>' +
-'</div>' +
-
-    */

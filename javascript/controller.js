@@ -2,12 +2,23 @@
  * Created by JUBU on 2/19/2017.
  */
 
-
 (function (window) {
     'use strict';
     function Controller() {
         this.addButtonClickEvent = function(){
             view.viewDivToAddTodo();
+            init();
+        }
+
+        function init(){
+            var checkBoxElem=document.getElementsByClassName('checkbox');
+            [].forEach.call(checkBoxElem, function(element) {
+                element.addEventListener('click', clickCheckBox);
+            });
+        }
+
+        function clickCheckBox(){
+            return this.id;
         }
 
         this.saveTaskButtonClickEvent = function(){
@@ -28,24 +39,23 @@
             filteredView(expectedTodos);
         }
 
-        this.optionClickListener = function (){
-            this.searchButtonClickEvent();
-        }
-
         this.editOptionClickListener = function (){
-
+            var editId = view.getEditTodoId();
+            var editTodo = model.repository.getSingleTodo(editId);
+            view.updateTodo(editTodo);
         }
 
         this.deleteOptionClickListener = function (){
-
+            var deleteTodoId = view.getDeleteTodoId();
+            model.repository.deleteTodo(deleteTodoId);
+            refreshView();
         }
 
-        /*this.checkedOptionClickListener = function (id){
-            var checked = model.repository.changeStatus(id);
-            var checkedTodo = model.repository.getSingleTodo(id);
-            view.viewChangedState(checkedTodo);
+        this.checkedOptionClickListener = function (){
+            var checkedTodoId = clickCheckBox();
+            model.repository.updateStatus(checkedTodoId);
             refreshView();
-        }*/
+        }
 
         function filteredView(expectedTodos){
             view.allTodoView(expectedTodos);
@@ -54,6 +64,7 @@
         function refreshView(){
             var todoList = model.repository.sortAllTodo();
             view.allTodoView(todoList);
+            init();
         }
         refreshView();
     }
