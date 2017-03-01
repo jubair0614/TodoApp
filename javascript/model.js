@@ -7,6 +7,8 @@
  */
 
 (function (window){
+    'use strict';
+
 
     function Model() {
         function Todo(title, description, status) {
@@ -63,17 +65,19 @@
                 allTodo.push(singleTodo);
                 setLocalStorageAllTodo(allTodo);
             }
+            setMaxId();
 
-            this.deleteTodo = function deleteTodo(id){
+            this.deleteTodo = function (id){
                 var todos = getLocalStorageAllTodo();
-
-                todos.forEach(function loop(item) {
-                    if(item.id == id) {
-                        delete item;
-                        return;
+                var updatedTodos = [];
+                for(var i=0; i <todos.length; i++) {
+                    if (todos[i].id == id) {
+                        console.log(todos[i]);
+                        delete todos[i];
                     }
-                })
-                setLocalStorageAllTodo(todos);
+                    else updatedTodos.push(todos[i]);
+                }
+                setLocalStorageAllTodo(updatedTodos);
             }
 
             this.updateTodo = function updateTodo(id, updatedTodo){
@@ -81,10 +85,12 @@
 
                 todos.forEach(function loop(item) {
                     if(item.id == id) {
-                        item = updatedTodo;
-                        return;
+                        item.title = updatedTodo.title;
+                        item.description = updatedTodo.description;
+                        item.status = updatedTodo.status;
                     }
                 })
+
                 setLocalStorageAllTodo(todos);
             }
 
@@ -92,8 +98,9 @@
                 var todos = getLocalStorageAllTodo();
                 var currentTodo;
                 todos.forEach(function (item) {
-                    if(item.id == id) return item;
+                    if(item.id == id) currentTodo = item;
                 })
+                return currentTodo;
             }
             this.getALlTodo = function getAllTodo(){
                 return getLocalStorageAllTodo();
@@ -110,35 +117,26 @@
                 var allData = getLocalStorageAllTodo();
                 allData.forEach(function (item){
                     if(item.id > idCounter) idCounter = item.id;
-                })
+                });
             }
 
             function setLocalStorageAllTodo(todoList) {
                 localStorage.setItem('todoList', JSON.stringify(todoList));
             }
 
-            this.sortAllTodo = function sortAllTodo(){
+            this.sortAllTodo = function (){
                 var allTodo = getLocalStorageAllTodo();
                 allTodo.sort(function (firstTodo, secondTodo){
                     return firstTodo.title.localeCompare(secondTodo.title);
-                })
+                });
                 return allTodo;
             }
 
-            function deleteItem(id){
-                var data = getLocalStorageData();
-                data = JSON.parse(data);
-                console.log("delete item id: " + id);
-
-                data.forEach(function (item){
-                    if(item.id == id) {
-                        var temp = data.indexOf(item);
-                        console.log(temp);
-                        data.splice(temp, 1);
-                    }
+            function sortSomeTodo(todos){
+                todos.sort(function (firstTodo, secondTodo){
+                    return firstTodo.title.localeCompare(secondTodo.title);
                 })
-                localStorage.setItem('todoList', JSON.stringify(data));
-                viewTodo();
+                return todos;
             }
 
             this.searchText = function search(content){
@@ -160,29 +158,31 @@
                 var allTodo = getLocalStorageAllTodo();
                 allTodo.forEach(function (item) {
                     if(item.id == id){
-                        if(currentTodo.status == 'pending') currentTodo.status = 'done';
-                        else currentTodo.status = 'pending';
+                        console.log("current status: " + item.status);
+                        if(item.status == 'pending') item.status = 'done';
+                        else item.status = 'pending';
+                        console.log("updated status: " + item.status);
                     }
                 })
                 setLocalStorageAllTodo(allTodo);
             }
 
-            this.filterTodos = function(state, matchedTodos){
+            this.getFilterTodos = function(state){
                 var expectedTodos = [];
                 if(state == 'all'){
-                    return matchedTodos;
+                    return sortSomeTodo(getLocalStorageAllTodo());
                 }
                 else {
-                    matchedTodos.forEach(function (item){
+                    var allTodo = getLocalStorageAllTodo();
+                    allTodo.forEach(function (item){
                         if(item.status == state){
                             expectedTodos.push(item);
                         }
                     })
-                    return expectedTodos;
+                    return sortSomeTodo(expectedTodos);
+
                 }
             }
-
-            setMaxId();
 
         }
 
@@ -190,6 +190,8 @@
         this.Todo = Todo;
 
     }
+
     window.model = new Model();
+    console.log(window.model);
 
 })(window);

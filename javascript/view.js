@@ -41,22 +41,22 @@
             }
         }
 
-        this.getTodoStatusId = function(){
-            return document.getEle
-        }
-
-        function createCheckBox(id){
+        function createCheckBox(){
             var checkBox = document.createElement('input');
             checkBox.type = 'checkbox';
             checkBox.classList.add('m-r-5px');
             checkBox.classList.add('checkbox');
-            checkBox.id = id;
-            //checkBox.onclick = function() { alert(this.id); };
-            console.log(checkBox.id);
+            checkBox.onclick = function() {
+                var dada = this.parentNode.parentNode;
+                var id = dada.getAttribute("data-id");
+
+                controller.checkedOptionClick(id);
+            };
 
             return checkBox;
         }
-        function createEditButton(id){
+
+        function createEditButton(){
             var editButton = document.createElement('button');
             editButton.classList.add('m-r-5px');
 
@@ -66,12 +66,18 @@
             fontEdit.setAttribute('aria-hidden', true);
 
             editButton.appendChild(fontEdit);
-            editButton.id = id;
-            console.log(editButton.id);
+            editButton.setAttribute('id', 'myBtn');
+
+            editButton.onclick = function() {
+                var dada = this.parentNode.parentNode;
+                var id = dada.getAttribute("data-id");
+                controller.editOptionClick(id);
+            };
+
             return editButton;
         }
 
-        function createDeleteButton(id){
+        function createDeleteButton(){
             var deleteButton = document.createElement('button');
             deleteButton.classList.add('m-r-5px');
 
@@ -81,37 +87,39 @@
             fontDelete.setAttribute('aria-hidden', true);
 
             deleteButton.appendChild(fontDelete);
-            deleteButton.id = id;
-            console.log(deleteButton.id);
+            deleteButton.onclick = function() {
+                var dada = this.parentNode.parentNode;
+                var id = dada.getAttribute("data-id");
+                controller.deleteOptionClick(id);
+            };
+
             return deleteButton;
         }
 
-        function createDivButtons(id){
+        function createDivButtons(){
             var divButtons = document.createElement('div');
             divButtons.classList.add('position-top-right');
             divButtons.classList.add('item_option');
 
-            divButtons.appendChild(createCheckBox(id));
-            divButtons.appendChild(createEditButton(id));
-            divButtons.appendChild(createDeleteButton(id));
+            divButtons.appendChild(createCheckBox());
+            divButtons.appendChild(createEditButton());
+            divButtons.appendChild(createDeleteButton());
 
             return divButtons;
         }
 
-        function createSaveButton(id){
+        function createSaveButton(){
             var saveButton = document.createElement('button');
             saveButton.classList.add('m-r-5px');
             saveButton.innerHTML = 'Save';
-            saveButton.id = id;
 
             return saveButton;
         }
 
-        function createCancelButton(id){
+        function createCancelButton(){
             var cancelButton = document.createElement('button');
             cancelButton.classList.add('m-r-5px');
             cancelButton.innerHTML = 'Cancel';
-            cancelButton.id = id;
 
             return cancelButton;
         }
@@ -123,39 +131,19 @@
             todoDiv.classList.add('box-shadow');
             todoDiv.classList.add('m-b-15px');
             todoDiv.classList.add('position-relative');
-
+            todoDiv.setAttribute("data-id", todo.id);
+            if(todo.status == 'done') todoDiv.classList.add('done-todo');
+            if(todo.status == 'pending' && todoDiv.classList.contains('done-todo')){
+                todoDiv.classList.remove('done-todo');
+            }
             var titleText = document.createElement('h4');
-            titleText.innerText = todo.title;
 
+            titleText.innerText = todo.title;
             var descriptionText = document.createElement('p');
             descriptionText.innerText = todo.description;
-            todoDiv.appendChild(createDivButtons(todo.id));
+            todoDiv.appendChild(createDivButtons());
             todoDiv.appendChild(titleText);
             todoDiv.appendChild(descriptionText);
-
-            todoDiv.id = todo.id;
-
-            return todoDiv;
-        }
-
-        function updatedTodoView(todo){
-            var todoDiv = document.createElement('div');
-            todoDiv.classList.add('todo-item');
-            todoDiv.classList.add('p-10px');
-            todoDiv.classList.add('box-shadow');
-            todoDiv.classList.add('m-b-15px');
-            todoDiv.classList.add('position-relative');
-
-            var titleText = document.createElement('h4');
-            titleText.innerText = todo.title;
-
-            var descriptionText = document.createElement('p');
-            descriptionText.innerText = todo.description;
-
-            todoDiv.appendChild(titleText);
-            todoDiv.appendChild(descriptionText);
-            todoDiv.appendChild(createSaveButton(todo.id));
-            todoDiv.appendChild(createCancelButton(todo.id));
 
             return todoDiv;
         }

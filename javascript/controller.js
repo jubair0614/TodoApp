@@ -7,18 +7,6 @@
     function Controller() {
         this.addButtonClickEvent = function(){
             view.viewDivToAddTodo();
-            init();
-        }
-
-        function init(){
-            var checkBoxElem=document.getElementsByClassName('checkbox');
-            [].forEach.call(checkBoxElem, function(element) {
-                element.addEventListener('click', clickCheckBox);
-            });
-        }
-
-        function clickCheckBox(){
-            return this.id;
         }
 
         this.saveTaskButtonClickEvent = function(){
@@ -34,38 +22,61 @@
             var content = view.searchContent();
             var state = view.getState();
             var matchedTodos = model.repository.searchText(content);
-            console.log(matchedTodos);
-            var expectedTodos = model.repository.filterTodos(state, matchedTodos);
-            filteredView(expectedTodos);
+            view.allTodoView(matchedTodos);
         }
 
-        this.editOptionClickListener = function (){
-            var editId = view.getEditTodoId();
-            var editTodo = model.repository.getSingleTodo(editId);
-            view.updateTodo(editTodo);
+        this.editOptionClick = function (id){
+            var editTodo = model.repository.getSingleTodo(id);
+
+            var modal = document.getElementById('myModal');
+
+            // Get the button that opens the modal
+            var btn = document.getElementById("myBtn");
+
+            // Get the <span> element that closes the modal
+            var span = document.getElementsByClassName("close")[0];
+
+            // When the user clicks the button, open the modal
+            btn.onclick = function() {
+                modal.style.display = "block";
+            }
+
+            // When the user clicks on <span> (x), close the modal
+            span.onclick = function() {
+                modal.style.display = "none";
+            }
+
+            // When the user clicks anywhere outside of the modal, close it
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+
+            view.updatedTodoView(editTodo);
         }
 
-        this.deleteOptionClickListener = function (){
-            var deleteTodoId = view.getDeleteTodoId();
-            model.repository.deleteTodo(deleteTodoId);
+        this.deleteOptionClick = function (id){
+            model.repository.deleteTodo(id);
             refreshView();
         }
 
-        this.checkedOptionClickListener = function (){
-            var checkedTodoId = clickCheckBox();
-            model.repository.updateStatus(checkedTodoId);
+        this.checkedOptionClick = function (id){
+            model.repository.updateStatus(id);
             refreshView();
         }
 
-        function filteredView(expectedTodos){
-            view.allTodoView(expectedTodos);
+
+        this.optionClickListener = function (){
+            refreshView();
         }
 
         function refreshView(){
-            var todoList = model.repository.sortAllTodo();
-            view.allTodoView(todoList);
-            init();
+            var whichOption = view.getState();
+            var selectedOptionData = model.repository.getFilterTodos(whichOption);
+            view.allTodoView(selectedOptionData);
         }
+
         refreshView();
     }
 
